@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Button } from './ui/button'
+import LoginForm from './LoginForm';
 
 export default function Navbar() {
   return (
@@ -9,8 +9,7 @@ export default function Navbar() {
             <Link href="/" className='text-2xl font-bold'>MyBlog</Link>
             <div className='h-1 w-0 group-hover:w-full transition-all bg-blue-500'></div>
         </div>
-       <Link href="/signin"><Button variant="outline">Login</Button></Link>
-       <Link href="/contact"><Button variant="outline">Contact</Button></Link>
+       <LoginForm/>
     </nav>
   )
 }
