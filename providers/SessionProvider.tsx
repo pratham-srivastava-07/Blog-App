@@ -1,11 +1,10 @@
+"use client";
+
 import { createBrowserClient } from "@supabase/ssr"
 import React, { useEffect } from "react"
 import {useUser} from "@/lib/store/user"
 
-
-
-
-export default function SessionProvider() {
+export default function Sessionprovider() {
     const setUser = useUser((state: { setUser: any })=> state.setUser)
 
     const supabase = createBrowserClient(

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/providers/Providers";
+// import { Providers } from "@/providers/Providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
+// import { SessionProvider } from "next-auth/react";
+import Sessionprovider from "@/providers/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +33,7 @@ export default function RootLayout({
         {children}
         </main>
         </ThemeProvider>
+       <Sessionprovider/>
         </body>
     </html>
   );
