@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { EyeOpenIcon } from "@radix-ui/react-icons"
+import { Switch } from "@/components/ui/switch"
+import { RocketIcon, StarIcon } from "lucide-react"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -48,11 +50,45 @@ export default function CreateBlog() {
       <form 
       onSubmit={form.handleSubmit(onSubmit)} 
       className="w-full rounded-md space-y-6">
-        <div className="p-5 flex items-center flex-wrap">
+        <div className="p-5 flex gap-5 items-center flex-wrap">
            <span role="button" tabIndex={0} className="flex items-center gap-1 bg-zinc-600 p-2 rounded-md hover:ring-2 hover:ring-zinc-400 transition-all">
             <EyeOpenIcon/>
             Preview
             </span>
+            <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              
+              <FormControl>
+              <div className="flex items-center gap-2 border bg-zinc-700 p-2 rounded-md">
+                <StarIcon/>
+                <span>Premium</span>
+              <Switch/>
+              </div>
+              </FormControl>
+              
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              
+              <FormControl>
+              <div className="flex items-center gap-2 border bg-zinc-700 p-2 rounded-md">
+                <RocketIcon/>
+                <span>Publish</span>
+              <Switch/>
+              </div>
+              </FormControl>
+              
+            </FormItem>
+          )}
+        />
         </div>
         <FormField
           control={form.control}
