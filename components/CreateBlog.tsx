@@ -19,12 +19,19 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { EyeOpenIcon, Pencil1Icon } from "@radix-ui/react-icons"
 import { Switch } from "@/components/ui/switch"
-import { PencilIcon, RocketIcon, StarIcon } from "lucide-react"
+import { RocketIcon, StarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  title: z.string().min(2, {
+    message: "Title must be at least 2 characters.",
   }),
+  image_url: z.string().url({message: "Invalid Url"}),
+  content: z.string().min(2, {
+    message: "Title must be at least 2 characters.",
+  }),
+  is_published: z.boolean(),
+  is_premium: z.boolean()
 })
 
 export default function CreateBlog() {
@@ -34,7 +41,11 @@ export default function CreateBlog() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      title: "",
+      image_url: "",
+      content: "",
+      is_published: true,
+      is_premium: false,
     },
   })
 
@@ -80,7 +91,7 @@ export default function CreateBlog() {
             </span>
             <FormField
           control={form.control}
-          name="username"
+          name="is_premium"
           render={({ field }) => (
             <FormItem>
               
@@ -88,7 +99,7 @@ export default function CreateBlog() {
               <div className="flex items-center gap-2 border bg-zinc-700 p-2 rounded-md">
                 <StarIcon/>
                 <span>Premium</span>
-              <Switch/>
+              <Switch checked={field.value} onCheckedChange={field.onChange}/>
               </div>
               </FormControl>
               
@@ -97,7 +108,7 @@ export default function CreateBlog() {
         />
          <FormField
           control={form.control}
-          name="username"
+          name="is_published"
           render={({ field }) => (
             <FormItem>
               
@@ -105,7 +116,7 @@ export default function CreateBlog() {
               <div className="flex items-center gap-2 border bg-zinc-700 p-2 rounded-md">
                 <RocketIcon/>
                 <span>Publish</span>
-              <Switch/>
+              <Switch checked={field.value} onCheckedChange={field.onChange}/>
               </div>
               </FormControl>
               
@@ -120,16 +131,19 @@ export default function CreateBlog() {
         </div>
         <FormField
           control={form.control}
-          name="username"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Username" {...field} />
+                <div className={cn("p-2 w-full flex break-words gap-2", isPreview ? "divide-x-0": "divide-x")}>
+                <Input placeholder="title" className={cn("border-none text-lg font-medium leading relaxed", isPreview ? "w-0 p-0": "w-full lg-1/2")} {...field} />
+                <div>
+                  <h1>
+                    {form.getValues().title}
+                  </h1>
+                </div>
+                </div>
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
