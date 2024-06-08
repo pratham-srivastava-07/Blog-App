@@ -39,6 +39,7 @@ export default function CreateBlog() {
   const [ isPreview, setPreview] = useState(false)
 
   const form = useForm<z.infer<typeof FormSchema>>({
+    mode: "all",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
@@ -124,7 +125,9 @@ export default function CreateBlog() {
           )}
         />
         </div>
-        <Button className="flex items-cennter gap-2">
+        <Button className="flex items-cennter gap-2"
+        disabled={!form.formState.isValid}
+        >
           <BsSave/>
           Save
           </Button>
@@ -137,13 +140,14 @@ export default function CreateBlog() {
               <FormControl>
                 <div className={cn("p-2 w-full flex break-words gap-2", isPreview ? "divide-x-0": "divide-x")}>
                 <Input placeholder="title" className={cn("border-none text-lg font-medium leading relaxed", isPreview ? "w-0 p-0": "w-full lg-1/2")} {...field} />
-                <div>
-                  <h1>
+                <div className={cn("lg:px-10", isPreview? "w-full mx-auto lg:w-4/5": "w-1/2 lg:block hidden")}>
+                  <h1 className="text-3xl font-medium">
                     {form.getValues().title}
                   </h1>
                 </div>
                 </div>
               </FormControl>
+              {form.getFieldState("title").invalid && form.getValues().title && <FormMessage/>}
               <FormMessage />
             </FormItem>
           )}
