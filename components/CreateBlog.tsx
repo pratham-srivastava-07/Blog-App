@@ -23,6 +23,9 @@ import { EyeOpenIcon, Pencil1Icon } from "@radix-ui/react-icons"
 import { Switch } from "@/components/ui/switch"
 import { RocketIcon, StarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Textarea } from "./ui/textarea"
+import MarkDown from "./MarkDown"
+import MarkDownPreview from "./MarkDown"
 
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -110,7 +113,6 @@ export default function CreateBlog() {
           name="is_published"
           render={({ field }) => (
             <FormItem>
-              
               <FormControl>
               <div className="flex items-center gap-2 border bg-zinc-700 p-2 rounded-md">
                 <RocketIcon/>
@@ -160,19 +162,17 @@ export default function CreateBlog() {
                 <Input placeholder="image url" className={cn("border-none text-lg font-medium leading relaxed", isPreview ? "w-0 p-0": "w-full lg-1/2")} {...field} />
                 <div className={cn("lg:px-10", isPreview? "w-full mx-auto lg:w-4/5": "w-1/2 lg:block hidden")}>
                 {
-                  isPreview ? (
+                  !isPreview ? (
                     <>
                     Click Preview to view image
                     </>
                   ) : (
-                    <>
-                   <div className="relative h-80 mt-10 border rounded-md">
-                   <Image src =  {form.getValues().image_url} alt="image" 
+                   <div className="relative h-80 mt-5 border rounded-md">
+                   <Image src =  {form.getValues().image_url} alt=""
                    fill 
                    className="object-cover object-center rounded-md" 
                    />
                    </div>
-                    </>
                   )
                 }
                 </div>
@@ -181,6 +181,24 @@ export default function CreateBlog() {
               {form.getFieldState("image_url").invalid && form.getValues().image_url && <div>
                 <FormMessage/>
                 </div>}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className={cn("p-2 w-full flex break-words gap-2", isPreview ? "divide-x-0": "divide-x h-70vh")}>
+                <Textarea placeholder="content" className={cn("border-none text-lg font-medium leading relaxed resize-none", isPreview ? "w-0 p-0": "w-full lg-1/2")} {...field} />
+                <div className={cn("lg:px-10", isPreview? "w-full mx-auto lg:w-4/5": "w-1/2 lg:block hidden")}>
+                 <MarkDownPreview content = {form.getValues().content} />
+                </div>
+                </div>
+              </FormControl>
+              {form.getFieldState("content").invalid && form.getValues().title && <FormMessage/>}
               <FormMessage />
             </FormItem>
           )}
