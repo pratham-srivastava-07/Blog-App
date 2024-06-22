@@ -168,7 +168,7 @@ export default function CreateBlog() {
                     </>
                   ) : (
                    <div className="relative h-80 mt-5 border rounded-md">
-                   <Image src =  {form.getValues().image_url} alt=""
+                   <Image src={form.getValues().image_url} alt=""
                    fill 
                    className="object-cover object-center rounded-md" 
                    />
