@@ -6,6 +6,7 @@ import Markdown from "react-markdown"
 import "highlight.js/styles/atom-one-dark.min.css"
 import {PiTerminal} from "react-icons/pi"
 import CopyButton from './CopyButton'
+import { icons } from '../lib/icons'
 
 export default function MarkDownPreview({content, className}: {content: string, className?:string}) {
 
@@ -26,7 +27,12 @@ export default function MarkDownPreview({content, className}: {content: string, 
             const match = /language-(\w+)/.exec(className || "")
 
             if(match?.length) {
+              
               let Icon = PiTerminal
+              const isMatch = icons.hasOwnProperty(match[1]);
+              if(isMatch) {
+                Icon = icons[match[1] as keyof typeof icons] 
+              }
               return <div className="bg-gradient-dark text-gray-300 border rounded-md">
                 <div className='px-5 py-2 border-b flex items-center justify-between'>
                  <div className="flex items-center gap-2">

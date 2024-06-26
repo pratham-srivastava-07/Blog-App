@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <nav className='flex items-center justify-between'>
         <div className="group">
-            <Link href="/" className='text-2xl font-bold'>MyBlog</Link>
+            <Link href="/" className='text-2xl font-bold'>Insightify</Link>
             <div className='h-1 w-0 group-hover:w-full transition-all bg-blue-500'></div>
         </div>
       {user?.id ? <Profile/> : <LoginForm/>}

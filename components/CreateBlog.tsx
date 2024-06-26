@@ -37,14 +37,26 @@ const FormSchema = z.object({
   }),
   is_published: z.boolean(),
   is_premium: z.boolean()
-})
+}).refine((data) => {
+  const image_url = data.image_url;
+  try {
+    const url = new URL(image_url)
+    return url.hostname === "**"
+  } catch  {
+    return false;
+  }
+},
+  {
+    message: "supports valid url",
+  }
+)
 
 export default function CreateBlog() {
 
   const [ isPreview, setPreview] = useState(false)
 
   const form = useForm<z.infer<typeof FormSchema>>({
-    mode: "all",
+    mode: "all", // for validation of fields whether valid or invalid
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
@@ -76,7 +88,7 @@ export default function CreateBlog() {
            <span 
            role="button" 
            tabIndex={0} 
-           onClick={()=>setPreview(!isPreview)}
+           onClick={()=>setPreview(!isPreview && !form.getFieldState("image_url").invalid)}
            className="flex items-center gap-1 bg-zinc-600 p-2 rounded-md hover:ring-2 hover:ring-zinc-400 transition-all">
            {isPreview ? 
            
@@ -193,7 +205,7 @@ export default function CreateBlog() {
               <FormControl>
                 <div className={cn("p-2 w-full flex break-words gap-2", isPreview ? "divide-x-0": "divide-x h-70vh")}>
                 <Textarea placeholder="content" className={cn("border-none text-lg font-medium leading relaxed resize-none", isPreview ? "w-0 p-0": "w-full lg-1/2")} {...field} />
-                <div className={cn("lg:px-10", isPreview? "w-full mx-auto lg:w-4/5": "w-1/2 lg:block hidden")}>
+                <div className={cn("overflow-y-auto", isPreview? "w-full mx-auto lg:w-4/5": "w-1/2 lg:block hidden")}>
                  <MarkDownPreview content = {form.getValues().content} />
                 </div>
                 </div>
