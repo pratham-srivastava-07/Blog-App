@@ -53,13 +53,22 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
+  if(request.nextUrl.pathname.startsWith('/dashboard/blog/create')) {
+    return NextResponse.next();
+  }
+  if(request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
  const { data } = await supabase.auth.getUser()
 
  console.log(data);
+
+
  
 
   return response
+
 }
 
 // export const config = {
