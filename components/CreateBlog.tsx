@@ -26,35 +26,14 @@ import { cn } from "@/lib/utils"
 import { Textarea } from "./ui/textarea"
 import MarkDown from "./MarkDown"
 import MarkDownPreview from "./MarkDown"
+import { FormSchema } from "@/app/dashboard/schema"
 
-const FormSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  image_url: z.string().url({message: "Invalid Url"}),
-  content: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  is_published: z.boolean(),
-  is_premium: z.boolean()
-}).refine((data) => {
-  const image_url = data.image_url;
-  try {
-    const url = new URL(image_url)
-    return url.hostname === "**"
-  } catch  {
-    return false;
-  }
-},
-  {
-    message: "supports valid url",
-  }
-)
 
-export default function CreateBlog() {
+export default function CreateBlog(
+  {onHandleSubmit}: 
+  {onHandleSubmit: (data: FormSchema)=> void}) {
 
   const [ isPreview, setPreview] = useState(false)
-
   const form = useForm<z.infer<typeof FormSchema>>({
     mode: "all", // for validation of fields whether valid or invalid
     resolver: zodResolver(FormSchema),
@@ -68,14 +47,9 @@ export default function CreateBlog() {
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+    onHandleSubmit(data)
+    // console.log(form.formState.isValid);
+    
   }
 
   return (
@@ -91,7 +65,6 @@ export default function CreateBlog() {
            onClick={()=>setPreview(!isPreview && !form.getFieldState("image_url").invalid)}
            className="flex items-center gap-1 bg-zinc-600 p-2 rounded-md hover:ring-2 hover:ring-zinc-400 transition-all">
            {isPreview ? 
-           
             (<>
             <Pencil1Icon/>
             Edit
@@ -116,7 +89,6 @@ export default function CreateBlog() {
               <Switch checked={field.value} onCheckedChange={field.onChange}/>
               </div>
               </FormControl>
-              
             </FormItem>
           )}
         />
@@ -143,6 +115,7 @@ export default function CreateBlog() {
           <BsSave/>
           Save
           </Button>
+        {/* {console.log(form.formState.isValid)} */}
         </div>
         <FormField
           control={form.control}
@@ -221,3 +194,4 @@ export default function CreateBlog() {
   )
 }
 
+export type FormSchema = z.infer<typeof FormSchema>

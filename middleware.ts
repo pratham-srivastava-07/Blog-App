@@ -56,11 +56,13 @@ export async function middleware(request: NextRequest) {
   if(request.nextUrl.pathname.startsWith('/dashboard/blog/create')) {
     return NextResponse.next();
   }
-  if(request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
+  
 
  const { data } = await supabase.auth.getUser()
+
+ if(request.nextUrl.pathname.startsWith('/dashboard') && !data) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
  console.log(data);
 
